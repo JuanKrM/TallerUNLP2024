@@ -1,0 +1,81 @@
+programa ejemplo
+procesos
+  proceso juntarFlores (ES flor : numero)
+  comenzar
+    mientras (HayFlorEnLaEsquina)
+      tomarFlor
+      flor := flor +1
+  fin
+  proceso recorrer (ES flor : numero)
+  comenzar
+    repetir 9
+      juntarFlores(flor)
+      mover
+  fin
+areas
+  area1: AreaP (1,1,1,10)
+  area2: AreaP (2,11,2,20)
+  area3: AreaP (3,21,3,30)
+  area4: AreaP (4,31,4,40)
+  area5: AreaP (5,41,5,50)
+  area6: AreaP (6,51,6,60)
+  areaFiscal: AreaP (2,1,2,1)
+robots
+  robot tipo1
+  variables
+    f:numero
+    quienSoy:numero
+  comenzar
+    f:=0
+    RecibirMensaje(quienSoy,fiscal)
+    recorrer(f)
+    EnviarMensaje(quienSoy,fiscal)
+    EnviarMensaje(f,fiscal)
+  fin
+  robot tipoFiscal
+  variables
+    flores:numero
+    maxF :numero
+    robotMax:numero
+    quienEs:numero
+  comenzar
+    flores:=0
+    maxF:=0
+    EnviarMensaje(1,robot1)
+    EnviarMensaje(2,robot2)
+    EnviarMensaje(3,robot3)
+    EnviarMensaje(4,robot4)
+    EnviarMensaje(5,robot5)
+    EnviarMensaje(6,robot6)
+    repetir 6
+      RecibirMensaje(quienEs,*)
+      RecibirMensaje(flores,*)
+      si (flores > maxF)
+        maxF := flores
+        robotMax := quienEs
+    Informar (quienEs,flores)     
+  fin
+variables
+  robot1: tipo1
+  robot2: tipo1
+  robot3: tipo1
+  robot4: tipo1
+  robot5: tipo1
+  robot6: tipo1
+  fiscal: tipoFiscal
+comenzar
+  AsignarArea(robot1, area1)
+  AsignarArea(robot2, area2)
+  AsignarArea(robot3, area3)
+  AsignarArea(robot4, area4)
+  AsignarArea(robot5, area5)
+  AsignarArea(robot6, area6)
+  AsignarArea(fiscal, areaFiscal)
+  Iniciar(fiscal,2,1)
+  Iniciar(robot1,1,1)
+  Iniciar(robot2,2,11)
+  Iniciar(robot3,3,21)
+  Iniciar(robot4,4,31)
+  Iniciar(robot5,5,41)
+  Iniciar(robot6,6,51)
+fin
