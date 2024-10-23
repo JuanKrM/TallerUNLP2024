@@ -1,0 +1,100 @@
+programa ejemplo
+procesos
+  proceso juntarPapel(ES papel: numero)
+  comenzar
+    mientras (HayPapelEnLaEsquina)
+      tomarPapel
+      papel:=papel+1
+  fin
+  proceso juntarFlor(ES flor: numero)
+  comenzar
+    mientras (HayFlorEnLaEsquina)
+      tomarFlor
+      flor := flor+1
+  fin
+  proceso correr (ES papel:numero)
+  comenzar
+    repetir 9
+      juntarPapel(papel)
+      mover
+  fin
+  proceso correrFlor (ES flor: numero)
+  comenzar
+    repetir 9
+      juntarFlor(flor)
+      mover
+  fin
+areas
+  areaJ: AreaP (50,50,50,50)
+  equipoA: AreaPC (1,1,20,1)
+  equipoB: AreaPC (1,5,20,5)
+robots
+  robot equipoA
+  variables
+    papel : numero
+    aux:numero
+    quienSoy:numero
+    go : numero
+  comenzar
+    papel:=0
+    RecibirMensaje(quienSoy,jefe)
+    si (quienSoy = 12)
+      RecibirMensaje(go,A1)
+    derecha
+    correr(papel)
+    si (quienSoy = 11)
+      EnviarMensaje(1,A2)
+      EnviarMensaje(papel,A2)
+    sino
+      aux := papel
+      RecibirMensaje(papel,A1)
+      aux:= papel+aux
+      Informar(aux)
+  fin
+  robot equipoB
+  variables
+    flor:numero
+    aux:numero
+    quienSoy:numero
+    go:numero
+  comenzar
+    flor:=0
+    RecibirMensaje(quienSoy,jefe)
+    si (quienSoy = 22)
+      RecibirMensaje(go,B1)
+    derecha
+    correrFlor(flor)
+    si (quienSoy = 21)
+      EnviarMensaje(1,B2)
+      EnviarMensaje(flor,B2)
+    sino
+      aux:=flor
+      RecibirMensaje(flor,B1)
+      aux:=flor+aux
+      Informar(aux)
+  fin
+  robot jefe
+  comenzar
+    EnviarMensaje(11,A1)
+    EnviarMensaje(12,A2)
+    EnviarMensaje(21,B1)
+    EnviarMensaje(22,B2)
+  fin
+variables
+  A1: equipoA
+  A2: equipoA
+  B1: equipoB
+  B2: equipoB
+  jefe:jefe
+comenzar
+  AsignarArea(jefe,areaJ)
+  AsignarArea(A1, equipoA)
+  AsignarArea(A2, equipoA)
+  AsignarArea(B1, equipoB)
+  AsignarArea(B2, equipoB)
+  Iniciar(jefe, 50,50)
+  Iniciar(A1, 1,1)
+  Iniciar(A2, 11,1)
+  Iniciar(B1, 1,5)
+  Iniciar(B2, 11,5)
+fin
