@@ -1,0 +1,143 @@
+programa p2e4
+procesos
+  proceso limpiarEsquina(ES cosas:numero)
+  comenzar
+    mientras (HayPapelEnLaEsquina)
+      tomarPapel
+      cosas:=cosas+1
+    mientras (HayFlorEnLaEsquina)
+      tomarFlor
+      cosas:=cosas+1
+  fin
+  proceso esquinaAleatorio (ES cosas:numero)
+  variables
+    av,ca,avVieja:numero
+  comenzar
+    avVieja:=PosAv
+    Random(av,25,75)
+    Random(ca,25,75)
+    Pos(av,ca)
+    limpiarEsquina(cosas)
+    Pos(avVieja,1)
+  fin
+  proceso autorizar (E id: numero E ok:boolean)
+  comenzar
+    si (id=1)
+      EnviarMensaje(ok,r1)
+    si (id=2)
+      EnviarMensaje(ok,r2)
+    si (id=3)
+      EnviarMensaje(ok,r3)
+    si (id=4)
+      EnviarMensaje(ok,r4)
+  fin
+  proceso maximo(ES max:numero E puntos:numero E jugador:numero ES ganador:numero)
+  comenzar
+    si(puntos > max)
+      max:=puntos
+      ganador:=jugador
+  fin
+  proceso finalizar (E ok:boolean)
+  comenzar
+    EnviarMensaje(ok,r1)
+    EnviarMensaje(ok,r2)
+    EnviarMensaje(ok,r3)
+    EnviarMensaje(ok,r4)
+  fin
+areas
+  cuadrante: AreaPC (25,25,75,75)
+  esqR1: AreaP (25,1,25,1)
+  esqR2: AreaP (30,1,30,1)
+  esqR3: AreaP (35,1,35,1)
+  esqR4: AreaP (40,1,40,1)
+  esqArbitro: AreaP (1,1,1,1)
+robots
+  robot jugador
+  variables
+    quienSoy: numero
+    ok: boolean
+    cosas:numero
+    gane:boolean
+  comenzar
+    RecibirMensaje(quienSoy,arbitro)
+    RecibirMensaje(ok,arbitro)
+    mientras (ok)
+      cosas:=0
+      esquinaAleatorio(cosas)
+      EnviarMensaje(ok,arbitro)
+      RecibirMensaje(ok,arbitro)
+    EnviarMensaje(quienSoy,arbitro)
+    EnviarMensaje(cosas,arbitro)
+    RecibirMensaje(gane,arbitro)
+    si (gane)
+      Pos(50,50)
+  fin
+  robot fiscalizador
+  variables
+    id:numero
+    ok:boolean
+    puntosR1,puntosR2,puntosR3,puntosR4:numero
+    max:numero
+    ganador:numero
+  comenzar
+    max:=-1
+    ganador:=-1
+    ok:=V
+    EnviarMensaje(1,r1)
+    EnviarMensaje(2,r2)
+    EnviarMensaje(3,r3)
+    EnviarMensaje(4,r4)
+    repetir 10
+      Random(id,1,4)
+      autorizar(id,ok)
+      RecibirMensaje(ok,*)
+    ok:=F
+    finalizar(ok)
+    repetir 4
+      RecibirMensaje(id,*)
+      si (id = 1)
+        RecibirMensaje(puntosR1,r1)
+        maximo(max,puntosR1,id,ganador)
+      sino
+        si (id = 2)
+          RecibirMensaje(puntosR2,r2)
+          maximo(max,puntosR2,id,ganador)
+        sino
+          si (id = 3)
+            RecibirMensaje(puntosR3,r3)
+            maximo(max,puntosR3,id,ganador)
+          sino
+            RecibirMensaje(puntosR4,r4)
+            maximo(max,puntosR4,id,ganador)
+    id:=1
+    repetir 4
+      si (id=ganador)
+        ok:=V
+      sino
+        ok:=F
+      autorizar(id,ok)
+      id:=id+1
+    Informar(ganador)
+  fin
+variables
+  r1: jugador
+  r2: jugador
+  r3: jugador
+  r4: jugador
+  arbitro: fiscalizador
+comenzar
+  AsignarArea(r1,esqR1)
+  AsignarArea(r2,esqR2)
+  AsignarArea(r3,esqR3)
+  AsignarArea(r4,esqR4)
+  AsignarArea(arbitro,esqArbitro)
+  AsignarArea(r1,cuadrante)
+  AsignarArea(r2,cuadrante)
+  AsignarArea(r3,cuadrante)
+  AsignarArea(r4,cuadrante)
+  Iniciar(r1,25,1)
+  Iniciar(r2,30,1)
+  Iniciar(r3,35,1)
+  Iniciar(r4,40,1)
+  Iniciar(arbitro,1,1)
+fin
