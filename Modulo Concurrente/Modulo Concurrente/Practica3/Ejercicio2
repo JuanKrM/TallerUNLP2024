@@ -1,0 +1,111 @@
+programa ejemplo
+procesos
+  proceso izq
+  comenzar
+    repetir 3
+      derecha
+  fin
+  proceso escalonFlores(E distancia: numero)
+  comenzar
+    repetir distancia
+      mover
+    mientras (HayFlorEnLaEsquina)
+      tomarFlor
+    derecha
+    repetir distancia
+      mover
+  fin
+  proceso escalonPapeles(E distancia:numero)
+  comenzar
+    repetir distancia
+      mover
+    mientras (HayPapelEnLaEsquina)
+      tomarPapel
+    izq
+    repetir distancia
+      mover
+    derecha
+  fin 
+  proceso recorridoFlores
+  variables
+    pasos:numero
+  comenzar
+    pasos:=5
+    repetir 4
+      escalonFlores(pasos)
+      pasos:=pasos-1
+      izq
+    BloquearEsquina(15,16)
+    escalonFlores(pasos)
+    repetir 2
+      izq
+    mover
+    LiberarEsquina(15,16)
+    EnviarMensaje(1,jefe)
+    pasos:=2
+    repetir 4
+      escalonFlores(pasos)
+      pasos:=pasos+1
+      izq
+  fin
+  proceso recorridoPapeles
+  variables
+    pasos:numero
+  comenzar
+    pasos:=5
+    repetir 4
+      escalonPapeles(pasos)
+      pasos:=pasos-1
+    BloquearEsquina(15,16)
+    escalonPapeles(pasos)
+    derecha
+    mover
+    LiberarEsquina(15,16)
+    EnviarMensaje(2,jefe)
+    pasos:=2
+    repetir 4
+      escalonPapeles(pasos)
+      pasos:=pasos+1
+  fin
+areas
+  areaFlorero: AreaP (1,1,15,100)
+  areaPapelero: AreaP(17,1,50,100)
+  areaCompartida: AreaPC(16,1,16,100)
+robots
+  robot robot1
+  variables
+    id:numero
+  comenzar
+    RecibirMensaje(id,jefe)
+    recorridoFlores
+  fin
+  robot robot2
+  variables
+    id:numero
+  comenzar
+    RecibirMensaje(id,jefe)
+    recorridoPapeles
+  fin
+  robot jefe
+  variables
+    central:numero
+  comenzar
+    EnviarMensaje(1,florero)
+    EnviarMensaje(2,papelero)
+    RecibirMensaje(central,*)
+    Informar(central)
+  fin
+variables
+  florero: robot1
+  papelero: robot2
+  jefe:jefe
+comenzar
+  AsignarArea(florero, areaFlorero)
+  AsignarArea(florero, areaCompartida)
+  AsignarArea(papelero, areaPapelero)
+  AsignarArea(papelero, areaCompartida)
+  AsignarArea(jefe, areaCompartida)
+  Iniciar(jefe,16,1)
+  Iniciar(florero, 1,1)
+  Iniciar(papelero, 31,1)
+fin
